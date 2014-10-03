@@ -1,0 +1,14 @@
+#!/bin/bash
+
+location_phpunit=$(echo "$(pwd)/vendor/phpunit/phpunit/phpunit")
+
+if [ -f $location_phpunit ]
+then
+    echo -e "\e[32mRunning phpunit from the vendor...\n\e[0m"
+    $location_phpunit --configuration ./tests/phpunit.xml $*
+else
+    echo -e "\e[31mFail find phpunit location\n\e[0m"
+    echo -e "\e[33mI'm running the default phpunit...\n\e[0m"
+    phpunit --configuration ./tests/phpunit.xml $*
+fi
+

@@ -1,0 +1,15 @@
+{
+    "minimum-stability": "dev",
+
+    "require-dev"      :
+    {
+        "phpunit/phpunit" : "dev-master",
+        "aws/aws-sdk-php" : "dev-master",
+        "doctrine/cache"  : "*",
+        "ext-openssl"     : "*",
+        "monolog/monolog" : "*",
+        "phpunit/phpunit" : "*",
+        "symfony/yaml"    : "*",
+        "guzzle/guzzle"   : "*"
+    }
+}
