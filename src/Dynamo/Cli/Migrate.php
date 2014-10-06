@@ -82,8 +82,14 @@ class Migrate implements RunnableInterface
         $migrable = new $class($dbClient);
         try {
             $migrable->doMigration();
-            
-            $openedFile = fopen($file, 'a');
+            $gotFile = explode(PHP_EOL, file_get_contents($this->changelog));
+
+            if (in_array($file, $gotFile)) {
+                // must not create the same migration!
+                return;
+            }
+
+            $openedFile = fopen($this->changelog, 'a');
             fwrite($openedFile, $file . PHP_EOL) && 
                 fclose($openedFile);
         
