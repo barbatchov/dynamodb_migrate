@@ -1,5 +1,8 @@
 <?php
+
+defined('ROOT_DIR') || define('ROOT_DIR', __DIR__);
+
 /* @var $loader \Composer\Autoload\ClassLoader */
-$loader = require __DIR__ . '/vendor/autoload.php';
-$loader->add('Dynamo', __DIR__ . '/tests/');
-$loader->add('Dynamo', __DIR__ . '/src/');
+$loader = require ROOT_DIR . '/vendor/autoload.php';
+$loader->add('Dynamo', ROOT_DIR . '/tests/');
+$loader->add('Dynamo', ROOT_DIR . '/src/');

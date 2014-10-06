@@ -3,27 +3,18 @@ namespace Dynamo\Cli;
 
 use \Dynamo\MigrableException;
 use \Dynamo\Repository;
+use \Dynamo\Cli\RunnableInterface;
 
 use \Aws\DynamoDb\Exception\ResourceInUseException;
 use \Aws\DynamoDb\Exception\ResourceNotFoundException;
 
-require_once __DIR__ . '/../../../bootstrap.php';
-
-class Migrate
+class Migrate implements RunnableInterface
 {
     private $changelog;
     private $migrationPath;
 
-    /** @var Dynamo\Repository */
+    /** @var \Dynamo\Repository */
     private $repository;
-
-    public function __construct($args = [])
-    {
-        foreach ($args as $method => $value) {
-            (method_exists($this, $method)) &&
-                $this->{$method}($value);
-        }
-    }
 
     /**
      * @return \Dynamo\Repository
@@ -82,7 +73,7 @@ class Migrate
                 ucfirst(preg_replace_callback('/(_.)/', $func, $matches[2]) . $matches[1]);
         }
 
-        /* @var $dbClient Aws\DynamoDb\DynamoDbClient */
+        /* @var $dbClient \Aws\DynamoDb\DynamoDbClient */
         $dbClient = $this->getRepository()->getDynamoDbClient();
 
         require_once $file;
@@ -104,27 +95,12 @@ class Migrate
             throw new MigrableException($e->getMessage(), 0, $e);
         }
     }
-
-    /**
-     * @param array $args
-     */
-    public static function run($args = [])
+    
+    public function run(array $args = [])
     {
-        $theArgs = [];
-
-        foreach ($args as $key => $value) {
-            if ($key == 0) {
-                continue;
-            }
-
-            preg_match('/--(.*?)=(.*)/', $value, $matches);
-
-            (isset($matches[1])) &&
-                $theArgs[$matches[1]] = (isset($matches[2])) ? $matches[2] : "";
+        foreach ($args as $method => $value) {
+            (method_exists($this, $method)) &&
+                $this->{$method}($value);
         }
-
-        new Migrate($theArgs);
     }
 }
-
-Migrate::run($argv);
